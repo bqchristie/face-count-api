@@ -1,0 +1,40 @@
+// Prisma schema file
+// See https://www.prisma.io/docs/concepts/components/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  password    String
+  token       String   @unique
+  name        String
+  createdAt   DateTime @default(now())
+  lastLoginAt DateTime @default(now())
+  isActive    Boolean  @default(true)
+
+  @@index([username])
+  @@index([token])
+}
+
+model Request {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime
+  updatedAt DateTime?
+  userId    Int
+  faceCount Int?
+}
+
+model Image {
+  id       Int    @id @default(autoincrement())
+  imageRef String @unique
+  type     String
+}
