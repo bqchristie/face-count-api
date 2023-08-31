@@ -12,7 +12,12 @@ class RequestService {
 
   static async get(id) {
     try {
-      return await Request.findUnique({ where: { id } });
+      return await Request.findUnique({
+        where: { id },
+        include: {
+          images: { select: { id: true, type: true, imageRef: true } },
+        },
+      });
     } catch (err) {
       throw new DatabaseError(err);
     }
