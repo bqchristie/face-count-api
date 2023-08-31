@@ -13,15 +13,12 @@ generator client {
 model User {
   id          Int      @id @default(autoincrement())
   username    String   @unique
-  password    String
   token       String   @unique
-  name        String
   createdAt   DateTime @default(now())
   lastLoginAt DateTime @default(now())
   isActive    Boolean  @default(true)
 
   @@index([username])
-  @@index([token])
 }
 
 model Request {
@@ -31,10 +28,15 @@ model Request {
   updatedAt DateTime?
   userId    Int
   faceCount Int?
+  images    Image[]   @relation("ImageRequest")
+  Image     Image[]
 }
 
 model Image {
-  id       Int    @id @default(autoincrement())
-  imageRef String @unique
-  type     String
+  id        Int     @id @default(autoincrement())
+  imageRef  String  @unique
+  type      String
+  request   Request @relation(name: "ImageRequest", fields: [requestId], references: [id])
+  requestId Int
+  Request   Request @relation(fields: [requestId], references: [id])
 }
