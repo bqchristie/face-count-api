@@ -1,17 +1,15 @@
-import { randomBytes } from "crypto";
-
+// import { randomBytes } from "crypto";
+import jwt from "jsonwebtoken";
+import config from "../utils/config.js";
 import { User } from "../models/init.js";
 import DatabaseError from "../models/error.js";
-import { generatePasswordHash, validatePassword } from "../utils/password.js";
-
-const generateRandomToken = () =>
-  randomBytes(48).toString("base64").replace(/[+/]/g, ".");
 
 class UserService {
+
   static async list() {
     try {
       const users = await User.findMany();
-      return users.map((u) => ({ ...u, password: undefined }));
+      return users;
     } catch (err) {
       throw new DatabaseError(err);
     }
@@ -25,7 +23,6 @@ class UserService {
 
       if (!user) return null;
 
-      delete user.password;
       return user;
     } catch (err) {
       throw new DatabaseError(err);
@@ -56,25 +53,28 @@ class UserService {
       throw new DatabaseError(err);
     }
   }
-
-  static async authenticateWithPassword(email, password) {
+ /*
+  Everyone gets authenticated!  If the username does not exist simply create a new one.
+  Should also set a role here which will be hard coded in the config.
+  */
+  static async authenticate(username) {
+    let user;
     try {
-      const user = await User.findUnique({
-        where: { email },
+      user = await User.findUnique({
+        where: { username },
       });
-      if (!user) return null;
+      if (!user)  {
+        user = await UserService.createUser({ username});
+      }
 
-      const passwordValid = await validatePassword(password, user.password);
+      user.lastLoginAt = new Date();
 
-      if (!passwordValid) return null;
+      const token = jwt.sign({ id: user.id }, config.SECRET_KEY, { expiresIn: config.TOKEN_EXPIRATION });
 
-      user.lastLoginAt = Date.now();
       const updatedUser = await User.update({
         where: { id: user.id },
-        data: { lastLoginAt: user.lastLoginAt },
+        data: { lastLoginAt: user.lastLoginAt, isActive: true, token },
       });
-
-      delete updatedUser.password;
       return updatedUser;
     } catch (err) {
       throw new DatabaseError(err);
@@ -82,66 +82,34 @@ class UserService {
   }
 
   static async authenticateWithToken(token) {
+    const isTokenValid = (token)=>{
+      return jwt.verify(token, config.SECRET_KEY, (err) => {
+        return !err;
+      });
+    }
     try {
       const user = await User.findUnique({
         where: { token },
       });
-      if (!user) return null;
 
-      delete user.password;
+      if (!user || isTokenValid(token) !== true) {
+        return null;
+      }
+
       return user;
     } catch (err) {
       throw new DatabaseError(err);
     }
   }
 
-  static async createUser({ password, ...userData }) {
-    const hash = await generatePasswordHash(password);
+  static async createUser({...userData }) {
 
     try {
       const data = {
         ...userData,
-        password: hash,
-        token: generateRandomToken(),
       };
 
       const user = await User.create({ data });
-
-      delete user.password;
-      return user;
-    } catch (err) {
-      throw new DatabaseError(err);
-    }
-  }
-
-  static async setPassword(user, password) {
-    user.password = await generatePasswordHash(password); // eslint-disable-line
-
-    try {
-      if (user.id) {
-        return User.update({
-          where: { id: user.id },
-          data: { password: user.password },
-        });
-      }
-
-      return user;
-    } catch (err) {
-      throw new DatabaseError(err);
-    }
-  }
-
-  static async regenerateToken(user) {
-    user.token = generateRandomToken(); // eslint-disable-line
-
-    try {
-      if (user.id) {
-        return User.update({
-          where: { id: user.id },
-          data: { password: user.password },
-        });
-      }
-
       return user;
     } catch (err) {
       throw new DatabaseError(err);

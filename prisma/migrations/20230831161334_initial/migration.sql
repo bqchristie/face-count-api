@@ -1,13 +1,11 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "token" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "token" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "lastLoginAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "isActive" BOOLEAN NOT NULL DEFAULT true
+    "lastLoginAt" DATETIME,
+    "isActive" BOOLEAN NOT NULL DEFAULT false
 );
 
 -- CreateTable
@@ -24,20 +22,20 @@ CREATE TABLE "Request" (
 CREATE TABLE "Image" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "imageRef" TEXT NOT NULL,
-    "type" TEXT NOT NULL
+    "type" TEXT NOT NULL,
+    "requestId" INTEGER NOT NULL,
+    CONSTRAINT "Image_requestId_fkey" FOREIGN KEY ("requestId") REFERENCES "Request" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Image_requestId_fkey" FOREIGN KEY ("requestId") REFERENCES "Request" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_token_key" ON "User"("token");
 
 -- CreateIndex
-CREATE INDEX "User_email_idx" ON "User"("email");
-
--- CreateIndex
-CREATE INDEX "User_token_idx" ON "User"("token");
+CREATE INDEX "User_username_idx" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Request_name_key" ON "Request"("name");

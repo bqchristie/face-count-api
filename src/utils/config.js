@@ -17,4 +17,6 @@ export default {
   NODEMAILER_SECURE: process.env.NODEMAILER_SECURE || false,
   REDIS_URL: process.env.REDIS_URL || "redis://127.0.0.1:6379",
   BG_TASKS_QUEUE: process.env.BG_TASKS_QUEUE || "bg-tasks",
+  SECRET_KEY:process.env.SECRET_KEY || 'donttellanyone',
+  TOKEN_EXPIRATION:process.env.TOKEN_EXPIRATION || '1m',
 };
