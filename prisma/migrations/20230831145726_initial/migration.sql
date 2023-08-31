@@ -2,10 +2,10 @@
 CREATE TABLE "User" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "username" TEXT NOT NULL,
-    "token" TEXT NOT NULL,
+    "token" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "lastLoginAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "isActive" BOOLEAN NOT NULL DEFAULT true
+    "lastLoginAt" DATETIME,
+    "isActive" BOOLEAN NOT NULL DEFAULT false
 );
 
 -- CreateTable

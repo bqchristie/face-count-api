@@ -10,14 +10,14 @@ describe("/api/v1/auth/login", () => {
   const user = { email: "test@example.com" };
 
   test("login with correct email and password succeeds", async () => {
-    UserService.authenticateWithPassword = jest.fn().mockResolvedValue(user);
+    UserService.authenticate = jest.fn().mockResolvedValue(user);
 
     const req = supertest(app);
     const res = await req
       .post("/api/v1/auth/login")
       .send({ email: "test@example.com", password: "secret" });
 
-    expect(UserService.authenticateWithPassword).toHaveBeenCalledWith(
+    expect(UserService.authenticate).toHaveBeenCalledWith(
       "test@example.com",
       "secret"
     );
@@ -41,14 +41,14 @@ describe("/api/v1/auth/login", () => {
   });
 
   test("login with incorrect email and password fails", async () => {
-    UserService.authenticateWithPassword = jest.fn().mockResolvedValue(null);
+    UserService.authenticate = jest.fn().mockResolvedValue(null);
 
     const req = supertest(app);
     const res = await req
       .post("/api/v1/auth/login")
       .send({ email: "test@example.com", password: "secret" });
 
-    expect(UserService.authenticateWithPassword).toHaveBeenCalledWith(
+    expect(UserService.authenticate).toHaveBeenCalledWith(
       "test@example.com",
       "secret"
     );

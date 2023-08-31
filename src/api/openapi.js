@@ -2,8 +2,6 @@ import swaggerJsDoc from "swagger-jsdoc";
 
 import {
   loginSchema,
-  registerSchema,
-  changePasswordSchema,
   userSchema,
 } from "./schemas/auth.js";
 import requestSchema from "./schemas/request.js";
@@ -12,7 +10,7 @@ import imageSchema from "./schemas/image.js";
 export const definition = {
   openapi: "3.0.0",
   info: {
-    title: "Hatch-TODO",
+    title: "Face-count-api",
     version: "0.0.1",
     description: "Skills Evaluation",
   },
@@ -27,8 +25,6 @@ export const definition = {
       Request: requestSchema,
       Image: imageSchema,
       loginSchema,
-      registerSchema,
-      changePasswordSchema,
       User: userSchema,
     },
     securitySchemes: {
