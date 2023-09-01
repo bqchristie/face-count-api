@@ -1,9 +1,6 @@
 import swaggerJsDoc from "swagger-jsdoc";
 
-import {
-  loginSchema,
-  userSchema,
-} from "./schemas/auth.js";
+import { loginSchema, userSchema } from "./schemas/auth.js";
 import requestSchema from "./schemas/request.js";
 import imageSchema from "./schemas/image.js";
 

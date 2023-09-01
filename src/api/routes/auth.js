@@ -4,9 +4,7 @@ import UserService from "../../services/user.js";
 import urls from "../urls.js";
 import { requireUser } from "../middlewares/auth.js";
 import { requireSchema } from "../middlewares/validate.js";
-import {
-  loginSchema,
-} from "../schemas/auth.js";
+import { loginSchema } from "../schemas/auth.js";
 
 const router = Router();
 
@@ -51,8 +49,6 @@ router.post(urls.auth.login, requireSchema(loginSchema), async (req, res) => {
 router.get(urls.auth.login, (req, res) => {
   res.status(405).json({ error: "Login with POST instead" });
 });
-
-
 
 // all auth routes after this can rely on existence of req.user
 router.use(requireUser);

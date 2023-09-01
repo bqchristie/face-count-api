@@ -3,13 +3,12 @@ import multer from "multer";
 import RequestService from "../../services/request.js";
 import { requireUser } from "../middlewares/auth.js";
 import { requireSchema, requireValidId } from "../middlewares/validate.js";
+import { tasks } from "../../utils/queue.js";
 import schema from "../schemas/request.js";
-import * as path from "path";
-import * as fs from "fs";
 import ImageService from "../../services/image.js";
 
 const router = Router();
-const upload= multer({ dest: "uploads/" });
+const upload = multer({ dest: "uploads/" });
 
 router.use(requireUser);
 
@@ -72,7 +71,6 @@ router.get("", async (req, res, next) => {
  */
 router.post("", upload.single("image"), async (req, res, next) => {
   try {
-
     const request = {};
     request.userId = req.user.id;
     request.name = req.body.name;
@@ -80,12 +78,14 @@ router.post("", upload.single("image"), async (req, res, next) => {
     const obj = await RequestService.create(request);
 
     const image = {
-      type: 'ORIGINAL',
+      type: "ORIGINAL",
       requestId: obj.id,
       imageRef: req.file.filename,
     };
 
     await ImageService.create(image);
+    // send the actual work off to a queue
+    tasks.processImages(obj);
 
     res.status(201).json(obj);
   } catch (error) {

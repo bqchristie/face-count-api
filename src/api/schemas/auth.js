@@ -3,16 +3,15 @@
 export const loginSchema = {
   type: "object",
   properties: {
-    username: { type: "string"},
+    username: { type: "string" },
   },
   required: ["username"],
 };
 
-
 export const userSchema = {
   type: "object",
   properties: {
-    username: { type: "string"},
+    username: { type: "string" },
     name: { type: "string" },
     createdAt: { type: "string", format: "date-time" },
     lastLoginAt: { type: "string", format: "date-time" },
