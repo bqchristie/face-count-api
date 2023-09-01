@@ -2,11 +2,8 @@ export default {
   type: "object",
   properties: {
     name: { type: "string" },
-    createdAt: { type: "string", format: "date-time" },
-    updatedAt: { type: "string", format: "date-time" },
-    userId: { type: "integer" },
-    faceCount: { type: "integer" },
+    file: { type: "string", format: "binary" },
   },
-  required: ["name", "createdAt", "userId"],
+  required: [],
   additionalProperties: false,
 };

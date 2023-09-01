@@ -1,7 +1,6 @@
 # Face-Count-API
 
 Skills Evaluation
-  
 
 ## Quickstart
 
