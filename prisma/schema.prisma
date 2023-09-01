@@ -30,6 +30,7 @@ model Request {
   faceCount Int?
   images    Image[]   @relation("ImageRequest")
   Image     Image[]
+  Status    String    @default("NEW")
 }
 
 model Image {
