@@ -1,6 +1,6 @@
 import { Request } from "../models/init.js";
 import DatabaseError from "../models/error.js";
-
+import { io } from "../../server.js";
 class RequestService {
   static async list() {
     try {
@@ -28,6 +28,8 @@ class RequestService {
       return await Request.create({ data });
     } catch (err) {
       throw new DatabaseError(err);
+    } finally {
+      io.emit("create-request", data);
     }
   }
 
