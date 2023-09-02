@@ -23,6 +23,9 @@ export async function processImages(task, done) {
 
   const imageContent = await fs.readFile(fileName);
 
+  request.Status = "processing";
+  request = await RequestService.update(request.id, request);
+
   // Hand off to google vision
   const visionClient = new ImageAnnotatorClient();
   const [result] = await visionClient.annotateImage({
@@ -34,7 +37,9 @@ export async function processImages(task, done) {
   // console.log(faceAnnotations);
   const numberOfPeople = faceAnnotations ? faceAnnotations.length : 0;
   console.log("Number of people:" + numberOfPeople);
-
+  request.faceCount = numberOfPeople;
   // Set request status to complete
+  request.Status = "complete";
+  request = await RequestService.update(request.id, request);
   done();
 }

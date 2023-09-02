@@ -29,11 +29,12 @@ class RequestService {
     } catch (err) {
       throw new DatabaseError(err);
     } finally {
-      io.emit("create-request", data);
+      io.emit("request-created", data);
     }
   }
 
   static async update(id, data) {
+    data.updatedAt = new Date();
     try {
       return await Request.update({
         where: { id },
@@ -41,6 +42,8 @@ class RequestService {
       });
     } catch (err) {
       throw new DatabaseError(err);
+    } finally {
+      io.emit("request-updated", data);
     }
   }
 
