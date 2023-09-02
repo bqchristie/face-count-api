@@ -10,9 +10,11 @@ class ImageService {
     }
   }
 
-  static async get(id) {
+  static async get(id, filters) {
+    const where = { id, ...filters };
+    console.log("where", where);
     try {
-      return await Image.findUnique({ where: { id } });
+      return await Image.findFirst({ where });
     } catch (err) {
       throw new DatabaseError(err);
     }
