@@ -24,12 +24,13 @@ class RequestService {
   }
 
   static async create(data) {
+    let newRequest = { ...data, Status: "PENDING" };
     try {
-      return await Request.create({ data });
+      newRequest = await Request.create({ data: newRequest });
+      io.emit("request-created", newRequest);
+      return newRequest;
     } catch (err) {
       throw new DatabaseError(err);
-    } finally {
-      io.emit("request-created", data);
     }
   }
 

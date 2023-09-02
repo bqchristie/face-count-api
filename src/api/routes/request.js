@@ -81,6 +81,7 @@ router.post("", upload.single("image"), async (req, res, next) => {
       type: "ORIGINAL",
       requestId: obj.id,
       imageRef: req.file.filename,
+      Staus: "pending",
     };
 
     await ImageService.create(image);
