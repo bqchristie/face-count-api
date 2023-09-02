@@ -70,6 +70,7 @@ router.get("", async (req, res, next) => {
  *               $ref: '#/components/schemas/Request'
  */
 router.post("", upload.single("image"), async (req, res, next) => {
+  let obj = {};
   try {
     const request = {};
     request.userId = req.user.id;
@@ -81,15 +82,17 @@ router.post("", upload.single("image"), async (req, res, next) => {
       type: "ORIGINAL",
       requestId: obj.id,
       imageRef: req.file.filename,
-      Staus: "pending",
     };
 
-    await ImageService.create(image);
+    const newImage = await ImageService.create(image);
     // send the actual work off to a queue
-    tasks.processImages(obj);
+    // tasks.processImages(obj);
+    await RequestService.processImage(obj, newImage);
 
     res.status(201).json(obj);
   } catch (error) {
+    console.log(error);
+
     if (error.isClientError()) {
       res.status(400).json({ error });
     } else {

@@ -37,8 +37,8 @@
     "supertest": "^6.2.4"
   },
   "scripts": {
-    "start": "node server.js",
-    "devstart": "nodemon -w src -w .env -w server.js server | pino-pretty -clt -i 'hostname,pid'",
+    "start": "GOOGLE_APPLICATION_CREDENTIALS=\"/Users/brucechristie/code/face-count-api/resume-api-361815-396f6055471e.json\" node server.js",
+    "devstart": "GOOGLE_APPLICATION_CREDENTIALS=\"/Users/brucechristie/code/face-count-api/resume-api-361815-396f6055471e.json\" nodemon -w src -w .env -w server.js server | pino-pretty -clt -i 'hostname,pid'",
     "lint": "eslint .",
     "prettier": "prettier -w .",
     "test": "jest --roots test --verbose",
