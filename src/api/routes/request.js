@@ -36,7 +36,7 @@ router.use(requireUser);
  */
 router.get("", async (req, res, next) => {
   try {
-    const results = await RequestService.list();
+    const results = await RequestService.list(req.query);
     res.json(results);
   } catch (error) {
     if (error.isClientError()) {
@@ -74,7 +74,7 @@ router.post("", upload.single("image"), async (req, res, next) => {
     const request = {};
     request.userId = req.user.id;
     request.name = req.body.name;
-    request.filename = req.file.filename;
+    request.filename = req.file?.filename;
     request.createdAt = new Date();
     const obj = await RequestService.create(request);
 

@@ -1,13 +1,12 @@
 import { Request } from "../models/init.js";
 import DatabaseError from "../models/error.js";
 import { io } from "../../server.js";
-import ImageService from "./image.js";
 import { promises as fs } from "fs";
 import { ImageAnnotatorClient } from "@google-cloud/vision";
 class RequestService {
-  static async list() {
+  static async list(where) {
     try {
-      return Request.findMany();
+      return Request.findMany({ where });
     } catch (err) {
       throw new DatabaseError(err);
     }
