@@ -38,7 +38,6 @@ class RequestService {
   }
 
   static async processImage(request, image) {
-    console.log("FUCKCKCCKCKCKCKCKCKCKCKCK");
     // Set request status to pending
     function fakeAsyncCall(ms) {
       return new Promise((resolve) => {
@@ -95,6 +94,7 @@ class RequestService {
   static async delete(id) {
     try {
       await Request.delete({ where: { id } });
+      io.emit("request-deleted", { id });
       return true;
     } catch (err) {
       throw new DatabaseError(err);

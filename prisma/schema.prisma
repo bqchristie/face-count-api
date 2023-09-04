@@ -24,12 +24,13 @@ model User {
 model Request {
   id        Int       @id @default(autoincrement())
   name      String    @unique
+  filename  String
   createdAt DateTime
   updatedAt DateTime?
   userId    Int
   faceCount Int?
   images    Image[]   @relation("ImageRequest")
-  Image     Image[]
+  // Image     Image[]
   Status    String    @default("NEW")
 }
 
@@ -37,7 +38,7 @@ model Image {
   id        Int     @id @default(autoincrement())
   imageRef  String  @unique
   type      String
-  request   Request @relation(name: "ImageRequest", fields: [requestId], references: [id])
+  request   Request @relation(name: "ImageRequest", fields: [requestId], references: [id], onDelete: Cascade)
   requestId Int
-  Request   Request @relation(fields: [requestId], references: [id])
+  // Request   Request @relation(fields: [requestId], references: [id])
 }

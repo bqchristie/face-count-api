@@ -70,11 +70,11 @@ router.get("", async (req, res, next) => {
  *               $ref: '#/components/schemas/Request'
  */
 router.post("", upload.single("image"), async (req, res, next) => {
-  let obj = {};
   try {
     const request = {};
     request.userId = req.user.id;
     request.name = req.body.name;
+    request.filename = req.file.filename;
     request.createdAt = new Date();
     const obj = await RequestService.create(request);
 
