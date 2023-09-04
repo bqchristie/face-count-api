@@ -18,9 +18,11 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("a user connected", socket.connected);
-  socket.on("create-request", (data) => {
-    console.log("create-request", data);
-    io.emit("create-request", data);
+  socket.on("request-created", (data) => {
+    io.emit("request-created", data);
+  });
+  socket.on("request-updated", (data) => {
+    io.emit("request-updated", data);
   });
 });
 

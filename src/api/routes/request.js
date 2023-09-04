@@ -74,6 +74,7 @@ router.post("", upload.single("image"), async (req, res, next) => {
     const request = {};
     request.userId = req.user.id;
     request.name = req.body.name;
+    request.filename = req.file.filename;
     request.createdAt = new Date();
     const obj = await RequestService.create(request);
 
@@ -83,12 +84,15 @@ router.post("", upload.single("image"), async (req, res, next) => {
       imageRef: req.file.filename,
     };
 
-    await ImageService.create(image);
+    const newImage = await ImageService.create(image);
     // send the actual work off to a queue
-    tasks.processImages(obj);
+    // tasks.processImages(obj);
+    await RequestService.processImage(obj, newImage);
 
     res.status(201).json(obj);
   } catch (error) {
+    console.log(error);
+
     if (error.isClientError()) {
       res.status(400).json({ error });
     } else {
