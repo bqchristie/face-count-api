@@ -3,7 +3,7 @@ import multer from "multer";
 import RequestService from "../../services/request.js";
 import { requireUser } from "../middlewares/auth.js";
 import { requireSchema, requireValidId } from "../middlewares/validate.js";
-import { tasks } from "../../utils/queue.js";
+// import { tasks } from "../../utils/queue.js";
 import schema from "../schemas/request.js";
 import ImageService from "../../services/image.js";
 
