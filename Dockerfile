@@ -1,29 +1,29 @@
-FROM node:16-buster-slim
+# Use an official Node.js runtime as the base image
+FROM node:14
 
-WORKDIR /app/
+# Set the working directory in the container
+WORKDIR /app
 
-RUN apt-get update \
-  && apt-get install -y build-essential curl --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man \
-  && apt-get clean \
-  && mkdir -p /node_modules && chown node:node -R /node_modules /app
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
 
-USER node
+COPY prisma/ ./prisma/
 
-COPY --chown=node:node package.json package-lock.json ./
+COPY resume-api-361815-396f6055471e.json ./
 
-RUN npm ci
+# Install app dependencies
+RUN npm install
 
-ARG NODE_ENV="production"
-ARG LOG_LEVEL="info"
-ARG DATABASE_URL
-ENV NODE_ENV="${NODE_ENV}" \
-    PATH="${PATH}:/node_modules/.bin" \
-    USER="node" \
-    DATABASE_URL="${DATABASE_URL}" \
-    LOG_LEVEL="${LOG_LEVEL}"
+# Generate DB
+RUN npx prisma migrate deploy
 
-COPY --chown=node:node . .
+
+
+# Copy the rest of the application code into the container
+COPY . .
+
+# Expose the port your Express app listens on (default is 3000)
 EXPOSE 3000
 
-CMD node server
+# Command to run your Node.js application
+CMD ["npm", "start"]
