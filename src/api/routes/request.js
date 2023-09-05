@@ -42,7 +42,6 @@ router.get("", async (req, res, next) => {
     }
     console.log(req.query);
     const results = await RequestService.list(query);
-    console.log("post quer6");
     res.json(results);
   } catch (error) {
     console.log();
