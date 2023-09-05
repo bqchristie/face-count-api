@@ -36,8 +36,12 @@ router.use(requireUser);
  */
 router.get("", async (req, res, next) => {
   try {
+    let query = {};
+    if (req.user.username !== "admin") {
+      query = { ...req.query, userId: req.user.id };
+    }
     console.log(req.query);
-    const results = await RequestService.list(req.query);
+    const results = await RequestService.list(query);
     console.log("post quer6");
     res.json(results);
   } catch (error) {
