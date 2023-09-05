@@ -6,7 +6,7 @@ import { ImageAnnotatorClient } from "@google-cloud/vision";
 class RequestService {
   static async list(where) {
     try {
-      return Request.findMany({ where });
+      return Request.findMany({ where, include: { images: true, user: true } });
     } catch (err) {
       throw new DatabaseError(err);
     }

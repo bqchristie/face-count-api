@@ -5,6 +5,7 @@ import urls from "../urls.js";
 import { requireUser } from "../middlewares/auth.js";
 import { requireSchema } from "../middlewares/validate.js";
 import { loginSchema } from "../schemas/auth.js";
+import config from "../../utils/config.js";
 
 const router = Router();
 
@@ -40,6 +41,7 @@ router.post(urls.auth.login, requireSchema(loginSchema), async (req, res) => {
   const user = await UserService.authenticate(username);
 
   if (user) {
+    user.isAdmin = username === config.ADMIN_USERNAME;
     res.json({ user });
   } else {
     res.status(401).json({ error: "Authentication failed" });

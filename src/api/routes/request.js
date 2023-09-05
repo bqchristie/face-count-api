@@ -36,9 +36,12 @@ router.use(requireUser);
  */
 router.get("", async (req, res, next) => {
   try {
+    console.log(req.query);
     const results = await RequestService.list(req.query);
+    console.log("post quer6");
     res.json(results);
   } catch (error) {
+    console.log();
     if (error.isClientError()) {
       res.status(400).json({ error });
     } else {

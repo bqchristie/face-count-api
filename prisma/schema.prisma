@@ -17,6 +17,7 @@ model User {
   createdAt   DateTime  @default(now())
   lastLoginAt DateTime?
   isActive    Boolean   @default(false)
+  Request     Request[]
 
   @@index([username])
 }
@@ -28,6 +29,7 @@ model Request {
   createdAt DateTime
   updatedAt DateTime?
   userId    Int
+  user      User      @relation(fields: [userId], references: [id])
   faceCount Int?
   images    Image[]   @relation("ImageRequest")
   // Image     Image[]

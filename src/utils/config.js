@@ -19,4 +19,5 @@ export default {
   BG_TASKS_QUEUE: process.env.BG_TASKS_QUEUE || "bg-tasks",
   SECRET_KEY: process.env.SECRET_KEY || "donttellanyone",
   TOKEN_EXPIRATION: process.env.TOKEN_EXPIRATION || "1m",
+  ADMIN_USERNAME: process.env.ADMIN_USERNAME || "admin",
 };
