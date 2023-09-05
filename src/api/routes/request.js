@@ -87,12 +87,13 @@ router.post("", upload.single("image"), async (req, res, next) => {
     const newImage = await ImageService.create(image);
     // send the actual work off to a queue
     // tasks.processImages(obj);
+
+    // WORKING AROUND ISSUE WITH QUEUE FOR NOW!
     await RequestService.processImage(obj, newImage);
 
     res.status(201).json(obj);
   } catch (error) {
     console.log(error);
-
     if (error.isClientError()) {
       res.status(400).json({ error });
     } else {
